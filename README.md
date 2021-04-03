@@ -44,3 +44,5 @@ It also supports recursive layering via the -Iterations flag.
 Invoke-BetterXencrypt -InFile invoke-mimikatz.ps1 -OutFile xenmimi.ps1 -Iterations 100
 ```
 Warning though, the files can get big and generating the output file can take a very long time depending on the scripts and number of iterations requested.
+# To-do List
+- Make the BetterXencrypt script itself FUD
