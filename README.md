@@ -30,6 +30,8 @@ kinda lazy to fireup my windows VM and retest it again 😂
 -   Ed Wilson AKA Microsoft Scripting Guy for the great Powershell scripting tutorials
 -   and the last one is Emeric Nasi for the research on bypassing AV dynamics
 # Usage
+Its better to run BetterXencrypt script on Linux Powershell,cause i never try it on Windows Powershell.
+(Surprised that Linux have Powershell?Take a look at [this](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7.1))
 ```
 Import-Module ./betterxencrypt.ps1
 Invoke-BetterXencrypt -InFile invoke-mimikatz.ps1 -OutFile xenmimi.ps1
