@@ -22,7 +22,6 @@ kinda lazy to fireup my windows VM and retest it again 😂
 -   Super easy to modify to create your own crypter variant
 -   Supports recursive layering (crypter crypting the crypted output), tested up to 500 layers.
 -   Supports Import-Module as well as standard running as long as the input script also supported it
--   GPLv3 -- Free and open-source!
 -   All features in a single file so you can take it with you anywhere!
 # Thanks To
 -   Me for not dying when creating this tool
