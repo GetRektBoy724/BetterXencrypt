@@ -29,6 +29,7 @@ function Invoke-BetterXencrypt {
      The output script is highly randomized in order to make static analysis even more difficut.
      It also lets you layer this recursively however many times you want in order to attempt to foil dynamic & heuristic detection.
      Not only that,Invoke-BetterXencrypt-ed script can bypass any behavior monitoring from AVs
+     Version : v1.0.0
     .PARAMETER InFile
     Specifies the script to encrypt.
     .PARAMETER OutFile
@@ -143,7 +144,7 @@ function Invoke-BetterXencrypt {
 
             $code_alternatives  = @()
             $code_alternatives += '${19} = 0' + "`r`n"
-            $code_alternatives += '${20} = 50000000' + "`r`n" 
+            $code_alternatives += '${20} = 15000000' + "`r`n" 
             $code_alternatives += 'For (${19}=0; ${19} -lt ${20}) {17} ${19}++ {18}' + "`r`n"
             $stub_template += $code_alternatives -join ''
 
