@@ -12,7 +12,7 @@ function Create-Var() {
 function Invoke-BetterXencrypt {
     <#
     .SYNOPSIS
-    Invoke-BetterXencrypt is a better version of Xencrypt Powershell crypter,cause Xencrypt is not FUD anymore,i recode the stub and "big bang boom",voila!Its FUD again
+    Invoke-BetterXencrypt is a better version of Xencrypt,Xencrypt itself is a Powershell runtime crypter designed to evade AVs,cause Xencrypt is not FUD anymore,i recode the stub and "big bang boom",voila!Its FUD again
     If you dont know what Xencrypt is,Xencrypt takes any PowerShell script as an input and both packs and encrypts it to evade AV. It also lets you layer this recursively however many times you want in order to foil dynamic & heuristic detection.
     .DESCRIPTION
      ____       _   _          __  __                                _   
