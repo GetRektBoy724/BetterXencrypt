@@ -84,7 +84,7 @@ function Invoke-BetterXencrypt {
             $keysize = $keysizes | Get-Random
 
             $compressiontypes = 'Gzip','Deflate'
-            $compressiontype = "Deflate"
+            $compressiontype = $compressiontypes | Get-Random
 
             # compress
             Write-Output "[*] Compressing ..."
