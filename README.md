@@ -7,7 +7,7 @@ __________        __    __              ____  ___                               
         \/     \/                \/           \_/   \/     \/     \/       \/     |__|         
 ```
 # BetterXencrypt
-A better version of Xencrypt.Xencrypt it self is a Powershell crypter designed to evade AVs.
+A better version of Xencrypt.Xencrypt it self is a Powershell runtime crypter designed to evade AVs.
 cause Xencrypt is not FUD anymore and easily get caught by AMSI,i recode the stub and now it FUD again.
 And the original Xencrypt,if you see on the screenshot proof,he's tested on Windows 8,and if i test it on the newest Windows 10,it doesnt FUD,
 cause that i want to make it FUD again and make everyone happy :D
