@@ -25,7 +25,7 @@ kinda lazy to fireup my windows VM and retest it again 😂
 -   All features in a single file so you can take it with you anywhere!
 # Thanks To
 -   Me for not dying when creating this tool
--   Xentropy and SecForce for creating the original Xencrypt
+-   Xentropy and SecForce for creating the original [Xencrypt](https://github.com/the-xentropy/xencrypt)
 -   Ed Wilson AKA Microsoft Scripting Guy for the great Powershell scripting tutorials
 -   and the last one is Emeric Nasi for the research on bypassing AV dynamics
 # Usage
