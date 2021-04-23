@@ -15,7 +15,7 @@ cause that i want to make it FUD again and make everyone happy :D
 # Proof-Of-FUDness (if you dont trust my word)
 https://www.virustotal.com/gui/file/43acf3646e8d882492588d927704f9d7d6777bee5a8e90defb967d43358330b7/detection
 # Features
--   Bypasses AMSI,Behavior Monitoring,and all modern AVs in use on MetaDefender VirusTotal
+-   Bypasses AMSI,Behavior Monitoring,and all modern AVs in use on MetaDefender and VirusTotal
 -   Compresses and encrypts powershell scripts
 -   Has a minimal and often even negative (thanks to the compression) overhead
 -   Randomizes variable names to further obfuscate the decrypter stub
