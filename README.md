@@ -13,7 +13,7 @@ And the original Xencrypt,if you see on the screenshot proof,he's tested on Wind
 cause that i want to make it FUD again and make everyone happy :D
 ## This tool tested on Windows 10 v20H2
 # Proof-Of-FUDness (if you dont trust my word)
-kinda lazy to fireup my windows VM and retest it again 😂
+https://www.virustotal.com/gui/file/43acf3646e8d882492588d927704f9d7d6777bee5a8e90defb967d43358330b7/details
 # Features
 -   Bypasses AMSI,Behavior Monitoring,and all modern AVs in use on MetaDefender (dont wanna test it VirusTotal.MetaDefender is more than enough)
 -   Compresses and encrypts powershell scripts
