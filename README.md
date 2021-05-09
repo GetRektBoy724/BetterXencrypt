@@ -24,6 +24,8 @@ https://www.virustotal.com/gui/file/427c697e11d476f733aaad9fc2ed9dffd8c8b45d84a7
 -   Supports recursive layering (crypter crypting the crypted output), tested up to 500 layers.
 -   Supports Import-Module as well as standard running as long as the input script also supported it
 -   All features in a single file so you can take it with you anywhere!
+# Note
+Don't be a script kiddie, I made this GPLv3 so you can make your own modifications. But yeah i'll keep developing this tool,and if you donnt want to make your own modifications,its fine anyway.
 # Thanks To
 -   Me for not dying when creating this tool
 -   Xentropy and SecForce for creating the original [Xencrypt](https://github.com/the-xentropy/xencrypt)
