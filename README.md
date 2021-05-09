@@ -13,11 +13,12 @@ And the original Xencrypt,if you see on the screenshot proof,he's tested on Wind
 cause that i want to make it FUD again and make everyone happy :D
 ## This tool tested on Windows 10 v20H2
 # Proof-Of-FUDness (if you dont trust my word)
-https://www.virustotal.com/gui/file/43acf3646e8d882492588d927704f9d7d6777bee5a8e90defb967d43358330b7/detection
+https://www.virustotal.com/gui/file/427c697e11d476f733aaad9fc2ed9dffd8c8b45d84a772c5179d3134d19ac24d/detection
 # Features
 -   Bypasses AMSI,Behavior Monitoring,and all modern AVs in use on MetaDefender and VirusTotal
 -   Compresses and encrypts powershell scripts
 -   Has a minimal and often even negative (thanks to the compression) overhead
+-   Multiple types of encryption and compression
 -   Randomizes variable names to further obfuscate the decrypter stub
 -   Super easy to modify to create your own crypter variant
 -   Supports recursive layering (crypter crypting the crypted output), tested up to 500 layers.
@@ -46,4 +47,3 @@ Invoke-BetterXencrypt -InFile invoke-mimikatz.ps1 -OutFile xenmimi.ps1 -Iteratio
 ```
 Warning though, the files can get big and generating the output file can take a very long time depending on the scripts and number of iterations requested.
 # To-do List
-- add XOR encryption
