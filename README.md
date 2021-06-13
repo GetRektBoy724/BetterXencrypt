@@ -11,7 +11,7 @@ A better version of Xencrypt.Xencrypt it self is a Powershell runtime crypter de
 cause Xencrypt is not FUD anymore and easily get caught by AMSI,i recode the stub and now it FUD again.
 And the original Xencrypt,if you see on the screenshot proof,he's tested on Windows 8,and if i test it on the newest Windows 10,it doesnt FUD,
 cause that i want to make it FUD again and make everyone happy :D
-## This tool tested on Windows 10 v20H2
+## This tool tested on Windows 10 v20H2 with MSFVenom PSH payload
 # Proof-Of-FUDness (if you dont trust my word)
 https://www.virustotal.com/gui/file/427c697e11d476f733aaad9fc2ed9dffd8c8b45d84a772c5179d3134d19ac24d/detection
 # Features
